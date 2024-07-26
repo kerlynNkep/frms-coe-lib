@@ -1,0 +1,25 @@
+name: TruffleHog Scan
+
+on:
+  push:
+    branches: [ main ]
+  pull_request:
+    branches: [ main ]
+
+jobs:
+  scan:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v3
+
+      - name: Install TruffleHog
+        uses: actions/setup-python@v4
+        with:
+          python-version: '3.x'
+
+      - name: Install dependencies
+        run: pip install trufflehog
+
+      - name: Run TruffleHog
+        run: trufflehog --entropy=low --regex | tee secrets.txt
